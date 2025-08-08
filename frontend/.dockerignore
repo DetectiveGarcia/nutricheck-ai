@@ -1,0 +1,11 @@
+# Ignore node_modules to avoid copying them into the build context unnecessarily.
+node_modules
+dist
+npm-debug.log
+.env
+
+# Other common development files to ignore
+.vscode
+.git
+.gitignore
+README.md
