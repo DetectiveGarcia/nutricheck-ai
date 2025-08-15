@@ -1,5 +1,5 @@
 # Use a Node.js base image
-FROM node:18-alpine AS builder
+FROM node:18 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Start a new, smaller image for production
-FROM node:18-alpine
+FROM node:18
 
 WORKDIR /app
 
