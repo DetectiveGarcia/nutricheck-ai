@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Response status:", res.status);
       console.log("Response headers:", res.headers);
 
-      const data = await res.json(); // Try parsing this
+      const data = await res.json(); 
       console.log("Parsed response JSON:", data);
 
       if (!res.ok) throw new Error(data.message || "Login failed");
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setRefreshToken(refreshToken);
     } catch (err: any) {
       console.error("Login error:", err);
-      Alert.alert("Login failed", err?.message || "Unknown error");
+      Alert.alert("Login failed", err?.error || "Unknown error");
       throw err;
     }
   };
