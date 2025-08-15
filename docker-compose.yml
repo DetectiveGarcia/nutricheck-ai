@@ -7,6 +7,8 @@ services:
       - ./backend/.env
     environment:
       - NODE_ENV=development
+    networks:
+      - app-network
 
   frontend:
     build: ./frontend
@@ -21,3 +23,9 @@ services:
       - ./frontend/.env
     stdin_open: true
     tty: true
+    networks:
+      - app-network
+    extra_hosts: 
+      - "host.docker.internal:host-gateway"
+networks:
+  app-network:

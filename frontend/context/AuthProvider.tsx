@@ -2,8 +2,7 @@ import { isTokenValid } from "@/utils/helpers/jwt";
 import * as SecureStore from "expo-secure-store"; //npm i expo-secure-store
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
-
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+import API_BASE_URL from "@/utils/helpers/apiUrl";
 
 type AuthContextType = {
   accessToken: string | null;
@@ -62,15 +61,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = await res.json(); // Try parsing this
       console.log("Parsed response JSON:", data);
 
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) throw new Error(data.error || "Login failed");
 
       const token = data.accessToken;
 
       await SecureStore.setItemAsync("accessToken", token);
       setAccessToken(token);
     } catch (err: any) {
-      console.error("Login error:", err);
-      Alert.alert("Login failed", err?.message || "Unknown error");
+      console.error("Register error:", err);
+      Alert.alert("Register failed", err?.message || "Unknown error");
       throw err;
     }
   };
@@ -88,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Response status:", res.status);
       console.log("Response headers:", res.headers);
 
-      const data = await res.json(); // Try parsing this
+      const data = await res.json(); 
       console.log("Parsed response JSON:", data);
 
       if (!res.ok) throw new Error(data.message || "Login failed");
@@ -104,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setRefreshToken(refreshToken);
     } catch (err: any) {
       console.error("Login error:", err);
-      Alert.alert("Login failed", err?.message || "Unknown error");
+      Alert.alert("Login failed", err?.error || "Unknown error");
       throw err;
     }
   };

@@ -74,8 +74,6 @@ export async function loginUser(
 
   const isRegistered = await userExist(email);
 
-  console.log(password);
-  console.log(password);
 
   if (!isRegistered) {
     res.status(401).json({ error: "Invalid email or password" });
@@ -90,7 +88,7 @@ export async function loginUser(
     });
 
     if (!user) {
-      res.status(401).json({ message: "No user found" });
+      res.status(401).json({ error: "No user found" });
       return;
     }
 
@@ -121,7 +119,7 @@ export async function loginUser(
     return;
   } catch (error) {
     console.log("loginUser error: " + error);
-    throw new Error("loginUser error");
+    throw new Error("loginUser error" + error);
   }
 }
 
@@ -129,7 +127,7 @@ export async function refreshToken(req: Request, res: Response) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ message: "No refresh token provided" }); //401 om token saknas
+    res.status(401).json({ error: "No refresh token provided" }); //401 om token saknas
     return;
   }
 
@@ -139,7 +137,7 @@ export async function refreshToken(req: Request, res: Response) {
     const decoded = await verifyJWT(refreshToken);
 
     if (!decoded || typeof decoded !== "object" || !decoded.userId) {
-      res.status(401).json({ message: "Invalid refresh token" }); //401 om token är fel
+      res.status(401).json({ error: "Invalid refresh token" }); //401 om token är fel
       return;
     }
 
@@ -148,12 +146,12 @@ export async function refreshToken(req: Request, res: Response) {
     });
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 
     if (user.refreshToken !== refreshToken) {
-      res.status(403).json({ message: "Refresh token mismatch" });
+      res.status(403).json({ error: "Refresh token mismatch" });
       return;
     }
 
@@ -184,7 +182,7 @@ export async function getMe(req: Request, res: Response) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({ message: "No token provided" }); //401 om token saknas
+      res.status(401).json({ error: "No token provided" }); //401 om token saknas
       return;
     }
 
@@ -193,7 +191,7 @@ export async function getMe(req: Request, res: Response) {
     const decoded = await verifyJWT(token); //{ "userId": "cmc27zx240000130wt8716xn6", "iat": 1752100904, "exp": 1752101204 }
 
     if (!decoded) {
-      res.status(401).json({ message: "Decodation not possible" });
+      res.status(401).json({ error: "Decodation not possible" });
       return;
     }
 
@@ -217,7 +215,7 @@ export async function getMyProducts(req: Request, res: Response) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({ message: "No refresh token provided" }); //401 om token saknas
+      res.status(401).json({ error: "No refresh token provided" }); //401 om token saknas
       return;
     }
 
@@ -226,7 +224,7 @@ export async function getMyProducts(req: Request, res: Response) {
     const decoded = await verifyJWT(token);
 
     if (!decoded) {
-      res.status(401).json({ message: "Decodation not possible" });
+      res.status(401).json({ error: "Decodation not possible" });
       return;
     }
 
@@ -266,7 +264,7 @@ export async function deleteUser(
     });
 
     if (!userExist) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ error: "User not found" });
     }
 
     await prisma.user.delete({
