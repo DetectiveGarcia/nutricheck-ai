@@ -1,5 +1,12 @@
 import * as Jose from 'jose';
 import { JWTUserPayload } from '../types/jwt.js';
+import crypto from 'crypto';
+
+if (!globalThis.crypto) {
+  // Polyfill Node crypto for jose
+  // @ts-ignore
+  globalThis.crypto = crypto.webcrypto;
+}
 
 function getEncodedSecret(): Uint8Array { 
   const secret = process.env.JWT_SECRET;
